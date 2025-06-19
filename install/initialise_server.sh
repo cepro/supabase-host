@@ -16,9 +16,6 @@ sh get-docker.sh
 systemctl enable docker
 systemctl start docker
 
-# Pull down the files we need to host Supabase
-git clone --depth 1 https://github.com/cepro/supabase-host.git
-
 # Configure firewall
 ufw --force enable
 ufw allow 22/tcp
