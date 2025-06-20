@@ -388,7 +388,7 @@ services:
   # Comment out everything below this point if you are using an external Postgres database
   db:
     container_name: supabase-db
-    image: ghcr.io/cepro/postgres:v0.2.0
+    image: ghcr.io/cepro/postgres:v0.2.1
     restart: unless-stopped
     volumes:
       - ./volumes/db/realtime.sql:/docker-entrypoint-initdb.d/migrations/99-realtime.sql:Z
