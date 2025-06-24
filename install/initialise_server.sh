@@ -9,12 +9,14 @@ apt-get upgrade -y
 apt-get install -y curl git ufw postgresql-client python3 python3-pip
 
 # Install Docker
-mkdir setup
-cd setup
 curl -fsSL https://get.docker.com -o get-docker.sh
 sh get-docker.sh
 systemctl enable docker
 systemctl start docker
+
+# Install docker-compose
+curl -L "https://github.com/docker/compose/releases/download/v2.20.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
 
 # Configure firewall
 ufw --force enable
