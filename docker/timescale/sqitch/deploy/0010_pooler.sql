@@ -3,6 +3,6 @@
 BEGIN;
 
 create schema if not exists _supavisor;
-alter schema _supavisor owner to :pguser;
+alter schema _supavisor owner to supabase_admin;
 
 COMMIT;
