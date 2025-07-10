@@ -2,6 +2,6 @@
 
 BEGIN;
 
--- XXX Add DDLs here.
+RAISE EXCEPTION 'Revert not supported for migration';
 
 COMMIT;
