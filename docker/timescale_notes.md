@@ -1,2 +1,0 @@
-- Can't use webhooks as the pg_net extensions can't be enabled in Tiemscale Cloud
-- Can't use pg_cron
