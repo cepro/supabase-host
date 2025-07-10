@@ -123,15 +123,15 @@ CREATE ROLE dashboard_user NOSUPERUSER CREATEDB CREATEROLE;
 GRANT ALL ON DATABASE tsdb TO dashboard_user;
 GRANT ALL ON SCHEMA auth TO dashboard_user;
 GRANT ALL ON SCHEMA extensions TO dashboard_user;
-GRANT ALL ON SCHEMA storage TO dashboard_user;
+-- GRANT ALL ON SCHEMA storage TO dashboard_user; Storage functionality is not currently used so this has been disabled
 GRANT ALL ON ALL TABLES IN SCHEMA auth TO dashboard_user;
 GRANT ALL ON ALL TABLES IN SCHEMA extensions TO dashboard_user;
--- GRANT ALL ON ALL TABLES IN SCHEMA storage TO dashboard_user;
+-- GRANT ALL ON ALL TABLES IN SCHEMA storage TO dashboard_user; Storage functionality is not currently used so this has been disabled
 GRANT ALL ON ALL SEQUENCES IN SCHEMA auth TO dashboard_user;
-GRANT ALL ON ALL SEQUENCES IN SCHEMA storage TO dashboard_user;
+-- GRANT ALL ON ALL SEQUENCES IN SCHEMA storage TO dashboard_user; Storage functionality is not currently used so this has been disabled
 GRANT ALL ON ALL SEQUENCES IN SCHEMA extensions TO dashboard_user;
 GRANT ALL ON ALL ROUTINES IN SCHEMA auth TO dashboard_user;
-GRANT ALL ON ALL ROUTINES IN SCHEMA storage TO dashboard_user;
+-- GRANT ALL ON ALL ROUTINES IN SCHEMA storage TO dashboard_user; Storage functionality is not currently used so this has been disabled
 GRANT ALL ON ALL ROUTINES IN SCHEMA extensions TO dashboard_user;
 
 -- migrate:down
