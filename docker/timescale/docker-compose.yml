@@ -77,7 +77,7 @@ services:
 
   auth:
     container_name: supabase-auth
-    image: supabase/gotrue:v2.174.0
+    image: auth-mw:v2
     restart: unless-stopped
     healthcheck:
       test:
@@ -100,6 +100,7 @@ services:
 
       GOTRUE_DB_DRIVER: postgres
       GOTRUE_DB_DATABASE_URL: postgres://supabase_auth_admin:${SUPABASE_AUTH_ADMIN_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
+      DB_ADMIN_ROLE: supabase_admin
 
       GOTRUE_SITE_URL: ${SITE_URL}
       GOTRUE_URI_ALLOW_LIST: ${ADDITIONAL_REDIRECT_URLS}
