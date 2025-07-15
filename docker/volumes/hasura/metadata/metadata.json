@@ -1,0 +1,50 @@
+{
+  "version": 3,
+  "sources": [
+    {
+      "name": "default",
+      "kind": "postgres",
+      "tables": [
+        {
+          "table": {
+            "name": "accounts",
+            "schema": "public"
+          }
+        },
+        {
+          "table": {
+            "name": "contracts",
+            "schema": "public"
+          }
+        },
+        {
+          "table": {
+            "name": "customers",
+            "schema": "public"
+          }
+        },
+        {
+          "table": {
+            "name": "meters",
+            "schema": "public"
+          }
+        },
+        {
+          "table": {
+            "name": "transactions",
+            "schema": "public"
+          }
+        }
+      ],
+      "configuration": {
+        "connection_info": {
+          "database_url": {
+            "from_env": "PG_DATABASE_URL"
+          },
+          "isolation_level": "read-committed",
+          "use_prepared_statements": false
+        }
+      }
+    }
+  ]
+}
