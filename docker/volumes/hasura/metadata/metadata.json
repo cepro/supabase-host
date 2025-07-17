@@ -7,32 +7,312 @@
       "tables": [
         {
           "table": {
+            "name": "account_events",
+            "schema": "myenergy"
+          }
+        },
+        {
+          "table": {
             "name": "accounts",
-            "schema": "public"
+            "schema": "myenergy"
+          },
+          "object_relationships": [
+            {
+              "name": "contracts",
+              "using": {
+                "foreign_key_constraint_on": "current_contract"
+              }
+            },
+            {
+              "name": "current_contract_info",
+              "using": {
+                "foreign_key_constraint_on": "current_contract"
+              }
+            },
+            {
+              "name": "properties",
+              "using": {
+                "foreign_key_constraint_on": "property"
+              }
+            }
+          ],
+          "array_relationships": [
+            {
+              "name": "customer_accounts",
+              "using": {
+                "foreign_key_constraint_on": {
+                  "column": "account",
+                  "table": {
+                    "name": "customer_accounts",
+                    "schema": "myenergy"
+                  }
+                }
+              }
+            },
+            {
+              "name": "payments",
+              "using": {
+                "foreign_key_constraint_on": {
+                  "column": "account",
+                  "table": {
+                    "name": "payments",
+                    "schema": "myenergy"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "table": {
+            "name": "benchmark_tariffs",
+            "schema": "myenergy"
+          }
+        },
+        {
+          "table": {
+            "name": "circuits",
+            "schema": "myenergy"
+          }
+        },
+        {
+          "table": {
+            "name": "contract_terms",
+            "schema": "myenergy"
           }
         },
         {
           "table": {
             "name": "contracts",
-            "schema": "public"
+            "schema": "myenergy"
+          },
+          "object_relationships": [
+            {
+              "name": "contract_terms",
+              "using": {
+                "foreign_key_constraint_on": "terms"
+              }
+            }
+          ],
+          "array_relationships": [
+            {
+              "name": "accounts",
+              "using": {
+                "foreign_key_constraint_on": {
+                  "column": "current_contract",
+                  "table": {
+                    "name": "accounts",
+                    "schema": "myenergy"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "table": {
+            "name": "customer_accounts",
+            "schema": "myenergy"
+          },
+          "object_relationships": [
+            {
+              "name": "accounts",
+              "using": {
+                "foreign_key_constraint_on": "account"
+              }
+            },
+            {
+              "name": "customers",
+              "using": {
+                "foreign_key_constraint_on": "customer"
+              }
+            }
+          ]
+        },
+        {
+          "table": {
+            "name": "customer_invites",
+            "schema": "myenergy"
+          }
+        },
+        {
+          "table": {
+            "name": "customer_tariffs",
+            "schema": "myenergy"
           }
         },
         {
           "table": {
             "name": "customers",
-            "schema": "public"
-          }
+            "schema": "myenergy"
+          },
+          "array_relationships": [
+            {
+              "name": "customer_accounts",
+              "using": {
+                "foreign_key_constraint_on": {
+                  "column": "customer",
+                  "table": {
+                    "name": "customer_accounts",
+                    "schema": "myenergy"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "table": {
+            "name": "escos",
+            "schema": "myenergy"
+          },
+          "array_relationships": [
+            {
+              "name": "properties",
+              "using": {
+                "foreign_key_constraint_on": {
+                  "column": "esco",
+                  "table": {
+                    "name": "properties",
+                    "schema": "myenergy"
+                  }
+                }
+              }
+            }
+          ]
         },
         {
           "table": {
             "name": "meters",
-            "schema": "public"
+            "schema": "myenergy"
           }
         },
         {
           "table": {
-            "name": "transactions",
-            "schema": "public"
+            "name": "microgrid_tariffs",
+            "schema": "myenergy"
+          }
+        },
+        {
+          "table": {
+            "name": "monthly_costs",
+            "schema": "myenergy"
+          }
+        },
+        {
+          "table": {
+            "name": "monthly_usage",
+            "schema": "myenergy"
+          },
+          "array_relationships": [
+            {
+              "name": "circuits",
+              "using": {
+                "foreign_key_constraint_on": {
+                  "column": "circuit_id",
+                  "table": {
+                    "name": "circuits",
+                    "schema": "myenergy"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "table": {
+            "name": "payments",
+            "schema": "myenergy"
+          },
+          "object_relationships": [
+            {
+              "name": "accounts",
+              "using": {
+                "foreign_key_constraint_on": "account"
+              }
+            }
+          ]
+        },
+        {
+          "table": {
+            "name": "properties",
+            "schema": "myenergy"
+          },
+          "object_relationships": [
+            {
+              "name": "customers",
+              "using": {
+                "foreign_key_constraint_on": "owner"
+              }
+            },
+            {
+              "name": "escos",
+              "using": {
+                "foreign_key_constraint_on": "esco"
+              }
+            },
+            {
+              "name": "solar_meter_info",
+              "using": {
+                "foreign_key_constraint_on": "solar_meter"
+              }
+            },
+            {
+              "name": "supply_meter_info",
+              "using": {
+                "foreign_key_constraint_on": "supply_meter"
+              }
+            }
+          ],
+          "array_relationships": [
+            {
+              "name": "accounts",
+              "using": {
+                "foreign_key_constraint_on": {
+                  "column": "property",
+                  "table": {
+                    "name": "accounts",
+                    "schema": "myenergy"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "table": {
+            "name": "solar_credit_tariffs",
+            "schema": "myenergy"
+          }
+        },
+        {
+          "table": {
+            "name": "solar_installation",
+            "schema": "myenergy"
+          }
+        },
+        {
+          "table": {
+            "name": "topups",
+            "schema": "myenergy"
+          }
+        },
+        {
+          "table": {
+            "name": "topups_monthly_solar_credits",
+            "schema": "myenergy"
+          }
+        },
+        {
+          "table": {
+            "name": "topups_payments",
+            "schema": "myenergy"
+          }
+        },
+        {
+          "table": {
+            "name": "wallets",
+            "schema": "myenergy"
           }
         }
       ],
@@ -42,7 +322,11 @@
             "from_env": "PG_DATABASE_URL"
           },
           "isolation_level": "read-committed",
-          "use_prepared_statements": false
+          "use_prepared_statements": false,
+          "session_variables": {
+            "role": "authenticated",
+            "request.jwt.claim.sub": "x-hasura-user-id"
+          }
         }
       }
     }
