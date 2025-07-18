@@ -1,0 +1,14 @@
+-- setup the database similar to tigerdata cloud
+ALTER ROLE postgres WITH NOLOGIN;
+
+CREATE ROLE tsdbadmin WITH
+  LOGIN
+  PASSWORD :'TSDBADMIN_PASSWORD'
+  NOSUPERUSER
+  INHERIT
+  CREATEDB
+  CREATEROLE
+  NOREPLICATION
+  NOBYPASSRLS;
+
+CREATE DATABASE tsdb WITH OWNER = tsdbadmin;
