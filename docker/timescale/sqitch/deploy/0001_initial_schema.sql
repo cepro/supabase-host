@@ -68,6 +68,10 @@ grant authenticated     to authenticator;
 grant service_role      to authenticator;
 grant supabase_admin    to authenticator;
 
+grant anon              to tsdbadmin;
+grant authenticated     to tsdbadmin;
+grant service_role      to tsdbadmin;
+
 grant usage                     on schema public to anon, authenticated, service_role;
 alter default privileges in schema public grant all on tables to anon, authenticated, service_role;
 alter default privileges in schema public grant all on functions to anon, authenticated, service_role;
