@@ -11,7 +11,7 @@ services:
 
   studio:
     container_name: supabase-studio
-    image: supabase/studio:2025.06.02-sha-8f2993d
+    image: public.ecr.aws/supabase/studio:2025.07.07-sha-1d3b0ba
     restart: unless-stopped
     healthcheck:
       test:
@@ -50,7 +50,7 @@ services:
 
   kong:
     container_name: supabase-kong
-    image: kong:2.8.1
+    image: public.ecr.aws/supabase/kong:2.8.1
     restart: unless-stopped
     ports:
       - ${KONG_HTTP_PORT}:8000/tcp
@@ -156,7 +156,7 @@ services:
 
   rest:
     container_name: supabase-rest
-    image: postgrest/postgrest:v12.2.12
+    image: public.ecr.aws/supabase/postgrest:v12.2.3
     restart: unless-stopped
     environment:
       PGRST_DB_URI: postgres://authenticator:${AUTHENTICATOR_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
@@ -173,7 +173,7 @@ services:
 
   meta:
     container_name: supabase-meta
-    image: supabase/postgres-meta:v0.89.3
+    image: public.ecr.aws/supabase/postgres-meta:v0.91.0
     restart: unless-stopped
     environment:
       PG_META_PORT: 8080
@@ -212,22 +212,3 @@ services:
       ]
     security_opt:
       - "label=disable"
-
-  db:
-    image: timescale/timescaledb-ha:pg17
-    container_name: ${CONTAINER_NAME:-timescaledb} # Default to 'timescaledb' if CONTAINER_NAME is not set
-    networks:
-      - ${NETWORK_NAME:-default} # Default to 'default' network if NETWORK_NAME is not set
-    volumes:
-      - ${VOLUME_NAME:-timescaledb_data}:/home/postgres/pgdata # Default to 'timescaledb_data' volume if VOLUME_NAME is not set
-    ports:
-      - "15432:5432"
-    environment:
-      POSTGRES_PASSWORD: postgres
-
-volumes:
-  timescaledb_data: # Define the default volume
-    name: ${VOLUME_NAME:-timescaledb_data}
-
-  db-config:
-
