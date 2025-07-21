@@ -240,12 +240,14 @@ services:
       vector:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ["CMD-SHELL", "pg_isready --dbname tsdb --username tsdbadmin"]
       timeout: 5s
       interval: 5s
       retries: 5
     environment:
+      # initial login password but then in init_tsdb_local we disable logins for postgres
       POSTGRES_PASSWORD: postgres
+      TSDBADMIN_PASSWORD: ${TSDBADMIN_PASSWORD:-tsdbadmin}
 
 volumes:
   timescaledb_data: # Define the default volume
