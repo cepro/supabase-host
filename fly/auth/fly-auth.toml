@@ -1,41 +1,52 @@
-app = "supabase-auth"
-primary_region = "lhr"
+# fly.toml app configuration file generated for supabase-auth-bec on 2025-07-22T14:11:52+10:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'supabase-auth-bec'
+primary_region = 'lhr'
 
 [build]
-  image = "ghcr.io/cepro/supabase-auth:v2.177.0"
+  image = 'ghcr.io/cepro/supabase-auth:v2.177.0-amd64'
 
 [env]
-  GOTRUE_API_HOST = "0.0.0.0"
-  GOTRUE_API_PORT = "9999"
-  GOTRUE_DB_DRIVER = "postgres"
-  DB_ADMIN_ROLE = "supabase_admin"
-  GOTRUE_JWT_ADMIN_ROLES = "service_role"
-  GOTRUE_JWT_AUD = "authenticated"
-  GOTRUE_JWT_DEFAULT_GROUP_NAME = "authenticated"
+  API_EXTERNAL_URL = 'https://supabase-kong-bec.fly.dev'
+  DB_ADMIN_ROLE = 'supabase_admin'
+  GOTRUE_API_HOST = '0.0.0.0'
+  GOTRUE_API_PORT = '9999'
+  GOTRUE_DB_DRIVER = 'postgres'
+  GOTRUE_EXTERNAL_ANONYMOUS_USERS_ENABLED = 'false'
+  GOTRUE_EXTERNAL_EMAIL_ENABLED = 'true'
+  GOTRUE_EXTERNAL_PHONE_ENABLED = 'false'
+  GOTRUE_JWT_ADMIN_ROLES = 'service_role'
+  GOTRUE_JWT_AUD = 'authenticated'
+  GOTRUE_JWT_DEFAULT_GROUP_NAME = 'authenticated'
+  GOTRUE_MAILER_AUTOCONFIRM = 'false'
+  GOTRUE_SMS_AUTOCONFIRM = 'false'
 
 [[services]]
+  protocol = 'tcp'
   internal_port = 9999
-  protocol = "tcp"
-  auto_stop_machines = false
+  auto_stop_machines = 'off'
   auto_start_machines = true
   min_machines_running = 1
-  max_machines_running = 1
+  ports = []
 
   [services.concurrency]
-    type = "connections"
+    type = 'connections'
     hard_limit = 500
     soft_limit = 250
 
   [[services.http_checks]]
-    interval = "15s"
-    timeout = "10s"
-    grace_period = "5s"
-    method = "GET"
-    path = "/health"
-    protocol = "http"
+    interval = '15s'
+    timeout = '10s'
+    grace_period = '5s'
+    method = 'GET'
+    path = '/health'
+    protocol = 'http'
     tls_skip_verify = false
 
 [[vm]]
-  cpu_kind = "shared"
+  cpu_kind = 'shared'
   cpus = 1
   memory_mb = 512
