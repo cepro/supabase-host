@@ -1,4 +1,4 @@
-# Supabase Kong on Fly
+# Supabase Auth on Fly
 
 ```sh
 fly launch --no-deploy --org <myorg> --name supabase-auth-<myorg>  --region lhr --copy-config --config fly-auth.toml

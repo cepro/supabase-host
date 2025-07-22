@@ -1,4 +1,4 @@
-# Supabase Kong on Fly
+# Supabase Rest on Fly
 
 ```sh
 fly launch --no-deploy --org <myorg> --name supabase-rest-<myorg>  --region lhr --copy-config --config fly-rest.toml
