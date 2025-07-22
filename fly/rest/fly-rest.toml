@@ -1,0 +1,44 @@
+# fly.toml app configuration file generated for supabase-rest-bec on 2025-07-22T13:55:49+10:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'supabase-rest-bec'
+primary_region = 'lhr'
+
+[build]
+  image = 'public.ecr.aws/supabase/postgrest:v12.2.3'
+
+[env]
+  PGRST_DB_ANON_ROLE = 'anon'
+  PGRST_DB_SCHEMAS = 'public,storage,graphql_public,flux,myenergy,flows'
+  PGRST_DB_USE_LEGACY_GUCS = 'false'
+
+[processes]
+  app = 'postgrest'
+
+[[services]]
+  protocol = 'tcp'
+  internal_port = 3000
+  auto_stop_machines = 'off'
+  auto_start_machines = true
+  min_machines_running = 1
+  processes = ['app']
+
+  [services.concurrency]
+    type = 'connections'
+    hard_limit = 1000
+    soft_limit = 500
+
+  [[services.http_checks]]
+    interval = '15s'
+    timeout = '10s'
+    grace_period = '5s'
+    method = 'GET'
+    path = '/'
+    protocol = 'http'
+
+[[vm]]
+  cpu_kind = 'shared'
+  cpus = 1
+  memory_mb = 512
