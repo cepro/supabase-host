@@ -13,7 +13,7 @@ primary_region = 'lhr'
   NEXT_ANALYTICS_BACKEND_PROVIDER = 'postgres'
   NEXT_PUBLIC_ENABLE_LOGS = 'true'
   STUDIO_PG_META_URL = 'http://supabase-meta-bec.internal:8080'
-  SUPABASE_URL = 'http://supabase-kong-bec.internal:8000'
+  SUPABASE_URL = 'https://supabase-kong-bec.fly.dev'
   HOSTNAME = "::"
   HOST = "::"
 
