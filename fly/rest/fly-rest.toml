@@ -7,15 +7,13 @@ app = 'supabase-rest'
 primary_region = 'lhr'
 
 [build]
-  image = 'public.ecr.aws/supabase/postgrest:v12.2.3'
+  dockerfile = "Dockerfile"
 
 [env]
   PGRST_DB_ANON_ROLE = 'anon'
   PGRST_DB_SCHEMAS = 'public,storage,graphql_public,flux,myenergy,flows'
   PGRST_DB_USE_LEGACY_GUCS = 'false'
-
-[processes]
-  app = 'postgrest'
+  PGRST_LOG_LEVEL = 'info'
 
 [[services]]
   protocol = 'tcp'
