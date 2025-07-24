@@ -1,7 +1,7 @@
 # Supabase Auth on Fly
 
 ```sh
-fly launch --no-deploy --org <myorg> --name supabase-auth-<myorg>  --region lhr --copy-config --config fly-auth.toml
+fly launch --no-deploy --no-public-ips --org <myorg> --name supabase-auth-<myorg>  --region lhr --copy-config --config fly-auth.toml
 
 # set secrets
 cp secrets.example.sh secrets.sh

@@ -1,7 +1,7 @@
 # Supabase Studio on Fly
 
 ```sh
-fly launch --no-deploy --org <myorg> --name supabase-studio-<myorg>  --region lhr --copy-config --config fly-studio.toml
+fly launch --no-deploy --no-public-ips --org <myorg> --name supabase-studio-<myorg>  --region lhr --copy-config --config fly-studio.toml
 
 # set secrets
 cp secrets.example.sh secrets.sh

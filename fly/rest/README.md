@@ -1,7 +1,7 @@
 # Supabase Rest on Fly
 
 ```sh
-fly launch --no-deploy --org <myorg> --name supabase-rest-<myorg>  --region lhr --copy-config --config fly-rest.toml
+fly launch --no-deploy --no-public-ips --org <myorg> --name supabase-rest-<myorg>  --region lhr --copy-config --config fly-rest.toml
 
 # set secrets
 cp secrets.example.sh secrets.sh
