@@ -24,9 +24,9 @@ primary_region = 'lhr'
 [[services]]
   protocol = 'tcp'
   internal_port = 8000
-  auto_stop_machines = 'off'
+  auto_stop_machines = true
   auto_start_machines = true
-  min_machines_running = 1
+  min_machines_running = 0
   processes = ['app']
 
   [[services.ports]]
@@ -43,10 +43,15 @@ primary_region = 'lhr'
     hard_limit = 1000
     soft_limit = 500
 
+  [[services.tcp_checks]]
+    interval = '15s'
+    timeout = '10s'
+    grace_period = '5s'
+
 [[services]]
   protocol = 'tcp'
   internal_port = 8443
-  auto_stop_machines = 'off'
+  auto_stop_machines = true
   auto_start_machines = true
   processes = ['app']
 

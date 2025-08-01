@@ -12,7 +12,7 @@ primary_region = 'lhr'
 [env]
   NEXT_ANALYTICS_BACKEND_PROVIDER = 'postgres'
   NEXT_PUBLIC_ENABLE_LOGS = 'true'
-  STUDIO_PG_META_URL = 'http://supabase-meta-bec.internal:8080'
+  STUDIO_PG_META_URL = 'http://supabase-meta-bec.flycast:8080'
   SUPABASE_URL = 'https://supabase-kong-bec.fly.dev'
   HOSTNAME = "::"
   HOST = "::"
@@ -20,23 +20,25 @@ primary_region = 'lhr'
 [[services]]
   protocol = 'tcp'
   internal_port = 3000
-  auto_stop_machines = 'off'
+  auto_stop_machines = true
   auto_start_machines = true
   min_machines_running = 1
-  ports = []
+
+  # NOTE: not exposed to public because we don't have a public ip on this app
+  # expose this so we can connect privately via flycast. we use flycast so
+  # that fly will auto start the app when it's asleep.  
+  [services.ports]
+    port = 3000
 
   [services.concurrency]
     type = 'connections'
     hard_limit = 500
     soft_limit = 250
 
-  [[services.http_checks]]
+  [[services.tcp_checks]]
     interval = '15s'
     timeout = '10s'
     grace_period = '5s'
-    method = 'GET'
-    path = '/api/platform/profile'
-    protocol = 'http'
 
 [[vm]]
   cpu_kind = 'shared'
