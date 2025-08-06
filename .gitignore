@@ -1,3 +1,4 @@
 .env
 _upcloud
 **/secrets.sh
+**/secrets-*.sh
