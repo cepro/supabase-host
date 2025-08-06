@@ -1,0 +1,70 @@
+# fly.toml app configuration file generated for supabase-kong-mgf on 2025-08-06T16:49:32+01:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'supabase-kong-mgf'
+primary_region = 'lhr'
+
+[build]
+  image = 'public.ecr.aws/supabase/kong:2.8.1'
+
+[env]
+  ENVIRONMENT = 'mgf'
+  KONG_DATABASE = 'off'
+  KONG_DECLARATIVE_CONFIG = '/tmp/kong.yml'
+  KONG_DNS_ORDER = 'LAST,AAAA,A,CNAME'
+  KONG_LOG_LEVEL = 'debug'
+  KONG_NGINX_PROXY_PROXY_BUFFERS = '64 160k'
+  KONG_NGINX_PROXY_PROXY_BUFFER_SIZE = '160k'
+  KONG_PLUGINS = 'request-transformer,cors,key-auth,acl,basic-auth'
+
+[processes]
+  app = "bash -c 'cp /tmp/temp.yml /tmp/kong.yml && sed -i \"s/\\$ENVIRONMENT/$ENVIRONMENT/g; s/\\$SUPABASE_ANON_KEY/$SUPABASE_ANON_KEY/g; s/\\$SUPABASE_SERVICE_KEY/$SUPABASE_SERVICE_KEY/g; s/\\$DASHBOARD_USERNAME/$DASHBOARD_USERNAME/g; s/\\$DASHBOARD_PASSWORD/$DASHBOARD_PASSWORD/g\" /tmp/kong.yml && /docker-entrypoint.sh kong docker-start'"
+
+[[services]]
+  protocol = 'tcp'
+  internal_port = 8000
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
+  [[services.ports]]
+    port = 80
+    handlers = ['http']
+    force_https = true
+
+  [[services.ports]]
+    port = 443
+    handlers = ['tls', 'http']
+
+  [services.concurrency]
+    type = 'connections'
+    hard_limit = 1000
+    soft_limit = 500
+
+  [[services.tcp_checks]]
+    interval = '15s'
+    timeout = '10s'
+    grace_period = '5s'
+
+[[services]]
+  protocol = 'tcp'
+  internal_port = 8443
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  processes = ['app']
+
+  [[services.ports]]
+    port = 8443
+    handlers = ['tls']
+
+[[files]]
+  guest_path = '/tmp/temp.yml'
+  local_path = './kong.yml'
+
+[[vm]]
+  cpu_kind = 'shared'
+  cpus = 1
+  memory_mb = 512
