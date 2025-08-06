@@ -1,0 +1,15 @@
+%syntax-version=1.0.0
+%project=supabase_setup
+
+0000_supabase_admin 2025-06-25T14:14:48Z Marcus Wood <marcus.wood@cepro.energy> # Initial Supabase configuration
+0001_initial_schema 2025-06-26T10:14:50Z Marcus Wood <marcus.wood@cepro.energy> # From supabase/postgres/migrations/db/init-scripts/00000000000000-initial-schema.sql
+0002_auth_schema 2025-06-26T10:23:05Z Marcus Wood <marcus.wood@cepro.energy> # From supabase/postgres/migrations/db/init-scripts/00000000000001-auth-schema.sql
+0003_storage_schema 2025-06-26T10:41:43Z Marcus Wood <marcus.wood@cepro.energy> # From supabase/postgres/migrations/db/init-scripts/00000000000002-storage-schema.sql
+0004_post_setup 2025-06-26T10:42:10Z Marcus Wood <marcus.wood@cepro.energy> # From supabase/postgres/migrations/db/init-scripts/00000000000003-post-setup.sql
+0005_webhooks 2025-06-25T14:13:56Z Marcus Wood <marcus.wood@cepro.energy> # Webooks
+0006_roles 2025-06-25T14:15:21Z Marcus Wood <marcus.wood@cepro.energy> # Roles
+0007_realtime 2025-06-25T14:15:33Z Marcus Wood <marcus.wood@cepro.energy> # Realtime
+0008_jwt 2025-06-25T14:15:44Z Marcus Wood <marcus.wood@cepro.energy> # JWT
+0009_logs 2025-06-25T14:15:53Z Marcus Wood <marcus.wood@cepro.energy> # Logs
+0010_pooler 2025-06-25T14:15:58Z Marcus Wood <marcus.wood@cepro.energy> # Pooler
+
