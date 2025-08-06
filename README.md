@@ -2,10 +2,12 @@
 
 Holds deployment configuration and scripts to self-host Supabase 
 
-The `install/initialise_server.sh` script will install the required dependencies and boot up the docker services, so an installation should look like:
+## Migrations
 
-```
-git clone --depth 1 https://github.com/cepro/supabase-host.git
-cp ./supabase-host/docker/.env.example ./supabase-host/docker/.env 
-./supabase-host/install/initialise_server.sh
+```sh
+# setup secrets - edit this file with new passwords
+sqitch> cp sqitch_secrets.conf.example sqitch_secrets.conf
+
+# run the migrations - add your timescale-<org> connection details to sqitch.conf
+SQITCH_USER_CONFIG=sqitch_secrets.conf sqitch deploy --target timescale-<org>
 ```
