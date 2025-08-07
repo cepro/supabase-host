@@ -1,4 +1,4 @@
-# fly.toml app configuration file generated for supabase-rest-mgf on 2025-07-22T13:55:49+10:00
+# fly.toml app configuration file generated for supabase-rest-mgf on 2025-08-07T10:08:13+10:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
@@ -7,7 +7,7 @@ app = 'supabase-rest-mgf'
 primary_region = 'lhr'
 
 [build]
-  dockerfile = "Dockerfile"
+  dockerfile = 'Dockerfile'
 
 [env]
   PGRST_DB_ANON_ROLE = 'anon'
@@ -23,10 +23,7 @@ primary_region = 'lhr'
   min_machines_running = 0
   processes = ['app']
 
-  # NOTE: not exposed to public mgfause we don't have a public ip on this app
-  # expose this so we can connect privately via flycast. we use flycast so
-  # that fly will auto start the app when it's asleep.  
-  [services.ports]
+  [[services.ports]]
     port = 3000
 
   [services.concurrency]
