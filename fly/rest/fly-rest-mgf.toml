@@ -1,0 +1,42 @@
+# fly.toml app configuration file generated for supabase-rest-mgf on 2025-08-07T10:08:13+10:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'supabase-rest-mgf'
+primary_region = 'lhr'
+
+[build]
+  dockerfile = 'Dockerfile'
+
+[env]
+  PGRST_DB_ANON_ROLE = 'anon'
+  PGRST_DB_SCHEMAS = 'public,storage,graphql_public,flux,myenergy,flows'
+  PGRST_DB_USE_LEGACY_GUCS = 'false'
+  PGRST_LOG_LEVEL = 'info'
+
+[[services]]
+  protocol = 'tcp'
+  internal_port = 3000
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
+  [[services.ports]]
+    port = 3000
+
+  [services.concurrency]
+    type = 'connections'
+    hard_limit = 1000
+    soft_limit = 500
+
+  [[services.tcp_checks]]
+    interval = '15s'
+    timeout = '10s'
+    grace_period = '5s'
+
+[[vm]]
+  cpu_kind = 'shared'
+  cpus = 1
+  memory_mb = 256

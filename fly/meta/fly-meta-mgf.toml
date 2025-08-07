@@ -1,38 +1,34 @@
-# fly.toml app configuration file generated for supabase-rest-bec on 2025-07-22T13:55:49+10:00
+# fly.toml app configuration file generated for supabase-meta-mgf on 2025-07-22T14:40:08+10:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'supabase-rest'
+app = 'supabase-meta-mgf'
 primary_region = 'lhr'
 
 [build]
-  dockerfile = "Dockerfile"
+  image = 'public.ecr.aws/supabase/postgres-meta:v0.91.0'
 
 [env]
-  PGRST_DB_ANON_ROLE = 'anon'
-  PGRST_DB_SCHEMAS = 'public,storage,graphql_public,flux,myenergy,flows'
-  PGRST_DB_USE_LEGACY_GUCS = 'false'
-  PGRST_LOG_LEVEL = 'info'
+  PG_META_PORT = '8080'
 
 [[services]]
   protocol = 'tcp'
-  internal_port = 3000
+  internal_port = 8080
   auto_stop_machines = true
   auto_start_machines = true
   min_machines_running = 0
-  processes = ['app']
 
-  # NOTE: not exposed to public because we don't have a public ip on this app
+  # NOTE: not exposed to public mgfause we don't have a public ip on this app
   # expose this so we can connect privately via flycast. we use flycast so
   # that fly will auto start the app when it's asleep.  
   [services.ports]
-    port = 3000
+    port = 8080
 
   [services.concurrency]
     type = 'connections'
-    hard_limit = 1000
-    soft_limit = 500
+    hard_limit = 500
+    soft_limit = 250
 
   [[services.tcp_checks]]
     interval = '15s'

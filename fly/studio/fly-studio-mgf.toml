@@ -1,0 +1,43 @@
+# fly.toml app configuration file generated for supabase-studio-mgf on 2025-08-07T10:19:13+10:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'supabase-studio-mgf'
+primary_region = 'lhr'
+
+[build]
+  image = 'public.ecr.aws/supabase/studio:2025.07.07-sha-1d3b0ba'
+
+[env]
+  HOST = '::'
+  HOSTNAME = '::'
+  NEXT_ANALYTICS_BACKEND_PROVIDER = 'postgres'
+  NEXT_PUBLIC_ENABLE_LOGS = 'true'
+  STUDIO_PG_META_URL = 'http://supabase-meta-mgf.flycast:8080'
+  SUPABASE_URL = 'https://supabase-kong-mgf.fly.dev'
+
+[[services]]
+  protocol = 'tcp'
+  internal_port = 3000
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+
+  [[services.ports]]
+    port = 3000
+
+  [services.concurrency]
+    type = 'connections'
+    hard_limit = 500
+    soft_limit = 250
+
+  [[services.tcp_checks]]
+    interval = '15s'
+    timeout = '10s'
+    grace_period = '5s'
+
+[[vm]]
+  cpu_kind = 'shared'
+  cpus = 1
+  memory_mb = 512

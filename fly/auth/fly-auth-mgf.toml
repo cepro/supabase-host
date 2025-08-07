@@ -1,0 +1,55 @@
+# fly.toml app configuration file generated for supabase-auth-mgf on 2025-08-07T10:16:08+10:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'supabase-auth-mgf'
+primary_region = 'lhr'
+
+[build]
+  image = 'ghcr.io/cepro/supabase-auth:v2.177.0-amd64'
+
+[env]
+  API_EXTERNAL_URL = 'https://supabase-kong-mgf.fly.dev'
+  DB_ADMIN_ROLE = 'supabase_admin'
+  GOTRUE_API_HOST = '0.0.0.0'
+  GOTRUE_API_PORT = '9999'
+  GOTRUE_DB_DRIVER = 'postgres'
+  GOTRUE_EXTERNAL_ANONYMOUS_USERS_ENABLED = 'false'
+  GOTRUE_EXTERNAL_EMAIL_ENABLED = 'true'
+  GOTRUE_EXTERNAL_PHONE_ENABLED = 'false'
+  GOTRUE_JWT_ADMIN_ROLES = 'service_role'
+  GOTRUE_JWT_AUD = 'authenticated'
+  GOTRUE_MAILER_AUTOCONFIRM = 'true'
+  GOTRUE_MAILER_EXTERNAL_HOSTS = 'supabase-kong-mgf.fly.dev'
+  GOTRUE_SITE_URL = 'https://supabase-kong-mgf.fly.dev'
+  GOTRUE_SMS_AUTOCONFIRM = 'false'
+  GOTRUE_SMTP_ADMIN_EMAIL = 'noreply@microgridfoundry.uk'
+  GOTRUE_SMTP_HOST = 'smtp.resend.com'
+  GOTRUE_SMTP_PORT = '587'
+  GOTRUE_SMTP_USER = 'resend'
+
+[[services]]
+  protocol = 'tcp'
+  internal_port = 9999
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+
+  [[services.ports]]
+    port = 9999
+
+  [services.concurrency]
+    type = 'connections'
+    hard_limit = 500
+    soft_limit = 250
+
+  [[services.tcp_checks]]
+    interval = '15s'
+    timeout = '10s'
+    grace_period = '5s'
+
+[[vm]]
+  cpu_kind = 'shared'
+  cpus = 1
+  memory_mb = 256
