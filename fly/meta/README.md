@@ -5,6 +5,7 @@ fly launch --no-deploy  --no-public-ips --org <myorg> --name supabase-meta-<myor
 
 fly --config fly-meta-<myorg>.toml deploy
 fly --config fly-meta-<myorg>.toml scale count 1
+fly --config fly-meta-<myorg>.toml ips allocate-v6 --private
 ```
 
 

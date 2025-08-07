@@ -9,4 +9,5 @@ cp secrets.example.sh secrets.sh
 
 fly --config fly-studio-<myorg>.toml deploy
 fly --config fly-studio-<myorg>.toml scale count 1
+fly --config fly-studio-<myorg>.toml ips allocate-v6 --private
 ```
