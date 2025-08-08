@@ -11,3 +11,7 @@ sqitch> cp sqitch_secrets.conf.example sqitch_secrets.conf
 # run the migrations - add your timescale-<org> connection details to sqitch.conf
 SQITCH_USER_CONFIG=sqitch_secrets.conf sqitch deploy --target timescale-<org>
 ```
+
+## Related Docs
+
+https://github.com/cepro/supabase-host/wiki/Rotate-JWT-secret-and-passwords
