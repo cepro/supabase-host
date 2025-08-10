@@ -192,36 +192,6 @@ services:
       PG_META_DB_USER: ${SUPABASE_ADMIN_USER}
       PG_META_DB_PASSWORD: ${SUPABASE_ADMIN_PASSWORD}
 
-  vector:
-    container_name: supabase-vector
-    image: public.ecr.aws/supabase/vector:0.28.1-alpine
-    restart: unless-stopped
-    volumes:
-      - ../volumes/logs/vector.yml:/etc/vector/vector.yml:ro,z
-      - ${DOCKER_SOCKET_LOCATION}:/var/run/docker.sock:ro,z
-    healthcheck:
-      test:
-        [
-          "CMD",
-          "wget",
-          "--no-verbose",
-          "--tries=1",
-          "--spider",
-          "http://vector:9001/health"
-        ]
-      timeout: 5s
-      interval: 5s
-      retries: 3
-    environment:
-      LOGFLARE_PUBLIC_ACCESS_TOKEN: ${LOGFLARE_PUBLIC_ACCESS_TOKEN}
-    command:
-      [
-        "--config",
-        "/etc/vector/vector.yml"
-      ]
-    security_opt:
-      - "label=disable"
-
   db:
     # pin image so we don't have a monster download locally everytime pg17 is upgraded.
     # occasionally manually upgrade to latest pg17 here:
@@ -234,9 +204,6 @@ services:
       - ./init_tsdb_local.sql:/docker-entrypoint-initdb.d/init_tsdb_local.sql:ro
     ports:
       - "15432:5432"
-    depends_on:
-      vector:
-        condition: service_healthy
     healthcheck:
       test: ["CMD-SHELL", "pg_isready --dbname tsdb --username tsdbadmin"]
       timeout: 5s
