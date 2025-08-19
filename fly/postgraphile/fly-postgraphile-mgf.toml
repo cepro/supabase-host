@@ -1,4 +1,4 @@
-# fly.toml app configuration file generated for supabase-postgraphile-mgf on 2025-08-14T00:00:00+00:00
+# fly.toml app configuration file generated for supabase-postgraphile-mgf on 2025-08-19T10:24:51+10:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
@@ -10,16 +10,16 @@ primary_region = 'lhr'
   image = 'graphile/postgraphile:4'
 
 [env]
-  DEBUG = "postgraphile:*,graphile-build:*"
-  PGQL_SCHEMA = "myenergy"
-  PGQL_ENHANCE_GRAPHIQL = "true"
-  PGQL_JWT_VERIFY_AUDIENCE = ""
-  PGQL_JWT_ROLE = "role"
-  PGQL_JWT_TOKEN_IDENTIFIER = "myenergy.jwt_claims"
+  DEBUG = 'postgraphile:*,graphile-build:*'
+  PGQL_ENHANCE_GRAPHIQL = 'true'
+  PGQL_JWT_ROLE = 'role'
+  PGQL_JWT_TOKEN_IDENTIFIER = 'myenergy.jwt_claims'
+  PGQL_JWT_VERIFY_AUDIENCE = ''
+  PGQL_SCHEMA = 'myenergy'
 
 [[services]]
   protocol = 'tcp'
-  internal_port = 5000
+  internal_port = 9080
   auto_stop_machines = true
   auto_start_machines = true
   min_machines_running = 0
@@ -28,8 +28,8 @@ primary_region = 'lhr'
   # NOTE: not exposed to public because we don't have a public ip on this app
   # expose this so we can connect privately via flycast. we use flycast so
   # that fly will auto start the app when it's asleep.  
-  [services.ports]
-    port = 5000
+  [[services.ports]]
+    port = 9080
 
   [services.concurrency]
     type = 'connections'
