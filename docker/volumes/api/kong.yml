@@ -62,6 +62,15 @@ services:
           - /auth/v1/authorize
     plugins:
       - name: cors
+  - name: auth-v1-open-token
+    url: http://auth:9999/token
+    routes:
+      - name: auth-v1-open-token
+        strip_path: true
+        paths:
+          - /auth/v1/token
+    plugins:
+      - name: cors
 
   ## Secure Auth routes
   - name: auth-v1
