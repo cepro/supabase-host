@@ -1,0 +1,47 @@
+# fly.toml app configuration file generated for supabase-postgraphile-mgf on 2025-08-14T00:00:00+00:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'supabase-postgraphile-mgf'
+primary_region = 'lhr'
+
+[build]
+  image = 'graphile/postgraphile:4'
+
+[env]
+  DEBUG = "postgraphile:*,graphile-build:*"
+  PGQL_SCHEMA = "myenergy"
+  PGQL_ENHANCE_GRAPHIQL = "true"
+  PGQL_JWT_VERIFY_AUDIENCE = ""
+  PGQL_JWT_ROLE = "role"
+  PGQL_JWT_TOKEN_IDENTIFIER = "myenergy.jwt_claims"
+
+[[services]]
+  protocol = 'tcp'
+  internal_port = 5000
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
+  # NOTE: not exposed to public because we don't have a public ip on this app
+  # expose this so we can connect privately via flycast. we use flycast so
+  # that fly will auto start the app when it's asleep.  
+  [services.ports]
+    port = 5000
+
+  [services.concurrency]
+    type = 'connections'
+    hard_limit = 1000
+    soft_limit = 500
+
+  [[services.tcp_checks]]
+    interval = '15s'
+    timeout = '10s'
+    grace_period = '5s'
+
+[[vm]]
+  cpu_kind = 'shared'
+  cpus = 1
+  memory_mb = 256

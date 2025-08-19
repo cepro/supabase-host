@@ -62,6 +62,16 @@ services:
           - /auth/v1/authorize
     plugins:
       - name: cors
+  - name: auth-v1-open-token
+    url: http://supabase-auth-$ENVIRONMENT.flycast:9999/token
+    routes:
+      - name: auth-v1-open-token
+        strip_path: true
+        paths:
+          - /auth/v1/token
+    plugins:
+      - name: cors
+
 
   ## Secure Auth routes
   - name: auth-v1
@@ -105,31 +115,26 @@ services:
             - admin
             - anon
 
-  # ## Secure GraphQL routes
-  # - name: graphql-v1
-  #   _comment: 'PostgREST: /graphql/v1/* -> http://supabase-rest-$ENVIRONMENT.flycast:3000/rpc/graphql'
-  #   url: http://supabase-rest-$ENVIRONMENT.flycast:3000/rpc/graphql
-  #   routes:
-  #     - name: graphql-v1-all
-  #       strip_path: true
-  #       paths:
-  #         - /graphql/v1
-  #   plugins:
-  #     - name: cors
-  #     - name: key-auth
-  #       config:
-  #         hide_credentials: true
-  #     - name: request-transformer
-  #       config:
-  #         add:
-  #           headers:
-  #             - Content-Profile:graphql_public
-  #     - name: acl
-  #       config:
-  #         hide_groups_header: true
-  #         allow:
-  #           - admin
-  #           - anon
+  ## Secure PostGraphile routes
+  - name: postgraphile-v1
+    _comment: 'PostGraphile: /graphql/* -> http://supabase-postgraphile-$ENVIRONMENT.flycast:5000/graphql'
+    url: http://supabase-postgraphile-$ENVIRONMENT.flycast:5000/graphql
+    routes:
+      - name: postgraphile-v1-all
+        strip_path: true
+        paths:
+          - /graphql/
+    plugins:
+      - name: cors
+      - name: key-auth
+        config:
+          hide_credentials: true
+      - name: acl
+        config:
+          hide_groups_header: true
+          allow:
+            - admin
+            - anon
 
   # ## Secure Realtime routes
   # - name: realtime-v1-ws
