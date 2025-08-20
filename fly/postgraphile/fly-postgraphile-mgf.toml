@@ -7,15 +7,10 @@ app = 'supabase-postgraphile-mgf'
 primary_region = 'lhr'
 
 [build]
-  image = 'graphile/postgraphile:4'
+
 
 [env]
   DEBUG = "postgraphile:*,graphile-build:*"
-  PGQL_SCHEMA = "myenergy"
-  PGQL_ENHANCE_GRAPHIQL = "true"
-  PGQL_JWT_VERIFY_AUDIENCE = ""
-  PGQL_JWT_ROLE = "role"
-  PGQL_JWT_TOKEN_IDENTIFIER = "myenergy.jwt_claims"
 
 [[services]]
   protocol = 'tcp'
