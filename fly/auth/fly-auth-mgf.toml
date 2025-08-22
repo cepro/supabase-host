@@ -28,6 +28,8 @@ primary_region = 'lhr'
   GOTRUE_SMTP_HOST = 'smtp.resend.com'
   GOTRUE_SMTP_PORT = '587'
   GOTRUE_SMTP_USER = 'resend'
+  GOTRUE_HOOK_CUSTOM_ACCESS_TOKEN_ENABLED = 'true'
+  GOTRUE_HOOK_CUSTOM_ACCESS_TOKEN_URI = 'pg-functions://postgres/myenergy/customer_jwt_token_hook'
 
 [[services]]
   protocol = 'tcp'
