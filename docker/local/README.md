@@ -17,7 +17,7 @@ docker/local> docker compose up -d
 # Run myenergy after stack started because it depends on some migrations in the
 # auth container that add columns to auth.users
 myenergy-db/sqitch> SQITCH_USER_CONFIG=sqitch_secrets.local.conf sqitch deploy --target timescale-local
-myenergy-db> bin/supa-seed
+myenergy-db> bin/seed
 ```
 
 # Teardown and remove data
