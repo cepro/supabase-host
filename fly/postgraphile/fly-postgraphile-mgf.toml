@@ -17,7 +17,7 @@ primary_region = 'lhr'
   internal_port = 5000
   auto_stop_machines = true
   auto_start_machines = true
-  min_machines_running = 0
+  min_machines_running = 1
   processes = ['app']
 
   # NOTE: not exposed to public because we don't have a public ip on this app
