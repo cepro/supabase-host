@@ -10,7 +10,7 @@ primary_region = 'lhr'
 
 
 [env]
-  DEBUG = "postgraphile:*,graphile-build:*"
+  DEBUG = "postgraphile:request:info,postgraphile:request:error"
 
 [[services]]
   protocol = 'tcp'
