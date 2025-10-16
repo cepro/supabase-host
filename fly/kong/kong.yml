@@ -72,6 +72,27 @@ services:
     plugins:
       - name: cors
 
+  ## Open Auth routes (without /auth/v1 prefix for email links)
+  ## Required because self-hosted Supabase ignores base paths in API_EXTERNAL_URL
+  ## See: https://github.com/orgs/supabase/discussions/33178
+  - name: auth-open-verify-root
+    url: http://supabase-auth-$ENVIRONMENT.flycast:9999/verify
+    routes:
+      - name: auth-open-verify-root
+        strip_path: true
+        paths:
+          - /verify
+    plugins:
+      - name: cors
+  - name: auth-open-callback-root
+    url: http://supabase-auth-$ENVIRONMENT.flycast:9999/callback
+    routes:
+      - name: auth-open-callback-root
+        strip_path: true
+        paths:
+          - /callback
+    plugins:
+      - name: cors
 
   ## Secure Auth routes
   - name: auth-v1
