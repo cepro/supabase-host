@@ -32,4 +32,13 @@ fi
 
 # Start socat IPv6 proxy: IPv6:3000 -> IPv4:3001
 echo "Starting socat IPv6 proxy on [::]:3000 -> 127.0.0.1:3001..."
-exec socat TCP6-LISTEN:3000,fork,reuseaddr,ipv6only=0 TCP:127.0.0.1:3001
+socat TCP6-LISTEN:3000,fork,reuseaddr,ipv6only=0 TCP:127.0.0.1:3001 &
+SOCAT_PID=$!
+
+# Wait for either process to exit
+wait -n $POSTGREST_PID $SOCAT_PID
+
+# Capture exit code
+EXIT_CODE=$?
+echo "Process exited with code $EXIT_CODE. Shutting down..."
+exit $EXIT_CODE
