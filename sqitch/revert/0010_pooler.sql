@@ -2,6 +2,6 @@
 
 BEGIN;
 
-RAISE EXCEPTION 'Revert not supported for migration';
+DO $$ BEGIN RAISE EXCEPTION 'Revert not supported for migration'; END $$;
 
 COMMIT;
