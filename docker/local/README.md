@@ -12,7 +12,7 @@ flows-db/sqitch> SQITCH_USER_CONFIG=sqitch_secrets.local.conf sqitch deploy --ta
 flows-db> bin/ts-seed
 
 # Start all containers - this runs migrations inside containers like auth
-docker/local> docker compose up -d
+supabase-host/docker/local> docker compose up -d
     
 # Run myenergy after stack started because it depends on some migrations in the
 # auth container that add columns to auth.users
