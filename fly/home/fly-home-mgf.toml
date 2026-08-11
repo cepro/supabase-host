@@ -1,0 +1,42 @@
+# fly.toml app configuration file for supabase-home-mgf
+# Simtricity Communities - Home & API Documentation Portal
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+
+app = 'supabase-home-mgf'
+primary_region = 'lhr'
+
+[build]
+  dockerfile = '../../../simt-supabase-home/Dockerfile'
+  build_args = { }
+  ignorefile = '../../../simt-supabase-home/.dockerignore'
+
+[env]
+  KONG_BASE_URL = ''
+  PORT = '8000'
+
+[[services]]
+  protocol = 'tcp'
+  internal_port = 8000
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
+  [[services.ports]]
+    port = 8000
+
+  [services.concurrency]
+    type = 'connections'
+    hard_limit = 500
+    soft_limit = 250
+
+  [[services.tcp_checks]]
+    interval = '15s'
+    timeout = '10s'
+    grace_period = '5s'
+
+[[vm]]
+  cpu_kind = 'shared'
+  cpus = 1
+  memory_mb = 256
