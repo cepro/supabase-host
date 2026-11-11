@@ -11,24 +11,33 @@ services:
 
   studio:
     container_name: supabase-studio
-    image: public.ecr.aws/supabase/studio:2025.07.07-sha-1d3b0ba
+    image: public.ecr.aws/supabase/studio:2026.11.02-sha-a05e7ec@sha256:727a7f37b15f4c76c44e0d765e6be231d8d71c67f2933b2df8c6cbcc9b04c5d0
     restart: unless-stopped
     healthcheck:
       test:
         [
-          "CMD",
-          "node",
-          "-e",
-          "fetch('http://studio:3000/api/platform/profile').then((r) => {if (r.status !== 200) throw new Error(r.status)})"
+          "CMD-SHELL",
+          "node -e \"fetch('http://localhost:3000/api/platform/profile').then((r) => {if (r.status !== 200) throw new Error(r.status)})\""
         ]
       timeout: 10s
       interval: 5s
       retries: 3
+      start_period: 20s
 
     environment:
+      # Listen on all IPv4 interfaces
+      HOSTNAME: "0.0.0.0"
+
       STUDIO_PG_META_URL: http://meta:8080
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${SUPABASE_ADMIN_USER}
       POSTGRES_PASSWORD: ${SUPABASE_ADMIN_PASSWORD}
+      POSTGRES_USER_READ_WRITE: ${SUPABASE_ADMIN_USER}
+
+      PG_META_CRYPTO_KEY: ${PG_META_CRYPTO_KEY}
+      PGRST_DB_SCHEMAS: ${PGRST_DB_SCHEMAS}
 
       DEFAULT_ORGANIZATION_NAME: ${STUDIO_DEFAULT_ORGANIZATION}
       DEFAULT_PROJECT_NAME: ${STUDIO_DEFAULT_PROJECT}
@@ -50,34 +59,43 @@ services:
 
   kong:
     container_name: supabase-kong
-    image: public.ecr.aws/supabase/kong:2.8.1
+    image: kong/kong:3.9.3@sha256:9a2ae6699a2ce0d60592eb176555d3594a22782c20cc6557a61ff3a7e8b559a3
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "kong", "health"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
     ports:
       - ${KONG_HTTP_PORT}:8000/tcp
       - ${KONG_HTTPS_PORT}:8443/tcp
     volumes:
       # https://github.com/supabase/supabase/issues/12661
       - ../volumes/api/kong.yml:/home/kong/temp.yml:ro,z
+      - ../volumes/api/kong-entrypoint.sh:/home/kong/kong-entrypoint.sh:ro,z
 
     environment:
       KONG_DATABASE: "off"
-      KONG_DECLARATIVE_CONFIG: /home/kong/kong.yml
+      KONG_DECLARATIVE_CONFIG: /usr/local/kong/kong.yml
       # https://github.com/supabase/cli/issues/14
       KONG_DNS_ORDER: LAST,A,CNAME
+      KONG_DNS_NOT_FOUND_TTL: 1
+      KONG_DNS_VALID_TTL: 5
       KONG_PLUGINS: request-transformer,cors,key-auth,acl,basic-auth
       KONG_NGINX_PROXY_PROXY_BUFFER_SIZE: 160k
       KONG_NGINX_PROXY_PROXY_BUFFERS: 64 160k
       KONG_LOG_LEVEL: debug
+      KONG_PROXY_ACCESS_LOG: /dev/stdout combined
       SUPABASE_ANON_KEY: ${ANON_KEY}
       SUPABASE_SERVICE_KEY: ${SERVICE_ROLE_KEY}
       DASHBOARD_USERNAME: ${DASHBOARD_USERNAME}
       DASHBOARD_PASSWORD: ${DASHBOARD_PASSWORD}
-    # https://unix.stackexchange.com/a/294837
-    entrypoint: bash -c 'eval "echo \"$$(cat ~/temp.yml)\"" > ~/kong.yml && /docker-entrypoint.sh kong docker-start'
+    entrypoint: ["/bin/sh", "/home/kong/kong-entrypoint.sh"]
 
   auth:
     container_name: supabase-auth
-    image: ghcr.io/cepro/supabase-auth:v2.177.0-amd64
+    # TODO pin by digest once pushed to ghcr (currently a local build of cepro/supabase-auth upgrade-v2.197.0)
+    image: ghcr.io/cepro/supabase-auth:v2.197.0
     restart: unless-stopped
     healthcheck:
       test:
@@ -159,18 +177,26 @@ services:
 
   rest:
     container_name: supabase-rest
-    image: public.ecr.aws/supabase/postgrest:v12.2.3
+    image: public.ecr.aws/supabase/postgrest:v14.18@sha256:c7cd7e265a85b05248abf53f4473fcec7e327c282d0bd0cf60f1551996d09fcf
     restart: unless-stopped
     depends_on:
       db:
         # Disable this if you are using an external Postgres database
         condition: service_healthy
+    healthcheck:
+      test: ["CMD", "postgrest", "--ready"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
     environment:
       PGRST_DB_URI: postgres://authenticator:${AUTHENTICATOR_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
-      PGRST_DB_SCHEMAS: public,storage,graphql_public,flux,myenergy,flows
+      PGRST_DB_SCHEMAS: ${PGRST_DB_SCHEMAS}
       PGRST_DB_ANON_ROLE: anon
       PGRST_JWT_SECRET: ${JWT_SECRET}
       PGRST_DB_USE_LEGACY_GUCS: "false"
+      # Admin server only on loopback - used by the `postgrest --ready` healthcheck
+      PGRST_ADMIN_SERVER_PORT: 3001
+      PGRST_ADMIN_SERVER_HOST: localhost
     command:
       [
         "postgrest"
@@ -178,7 +204,7 @@ services:
 
   meta:
     container_name: supabase-meta
-    image: public.ecr.aws/supabase/postgres-meta:v0.91.0
+    image: public.ecr.aws/supabase/postgres-meta:v0.100.0@sha256:145325b7e39f8ef4931d6e8cfd3f6f4d655de09d72a2ccc96d9513542c2202bd
     restart: unless-stopped
     depends_on:
       db:
@@ -191,11 +217,12 @@ services:
       PG_META_DB_NAME: ${POSTGRES_DB}
       PG_META_DB_USER: ${SUPABASE_ADMIN_USER}
       PG_META_DB_PASSWORD: ${SUPABASE_ADMIN_PASSWORD}
+      CRYPTO_KEY: ${PG_META_CRYPTO_KEY}
 
   db:
     # pin image so we don't have a monster download locally everytime pg17 is upgraded.
-    # occasionally manually upgrade to latest pg17 here:
-    image: timescale/timescaledb-ha@sha256:7aef5f85226cabe2a3af4d458b5679891bbf44898549f76cafa28ac7356536a6
+    # occasionally manually upgrade to latest pg17 here (keep in step with MGF / Timescale Cloud):
+    image: timescale/timescaledb-ha:pg17.11-ts2.31.0@sha256:3f0b3f6bdf4912878444a36e6113a18346309583c4d1a61d81a0c511342a1afd
     container_name: ${CONTAINER_NAME:-timescaledb} # Default to 'timescaledb' if CONTAINER_NAME is not set
     networks:
       - ${NETWORK_NAME:-default} # Default to 'default' network if NETWORK_NAME is not set
