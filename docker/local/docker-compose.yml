@@ -94,8 +94,7 @@ services:
 
   auth:
     container_name: supabase-auth
-    # TODO pin by digest once pushed to ghcr (currently a local build of cepro/supabase-auth upgrade-v2.197.0)
-    image: ghcr.io/cepro/supabase-auth:v2.197.0
+    image: ghcr.io/cepro/supabase-auth:v2.197.0@sha256:32244cb6ce509f6520b8ce9680467048163283eb8a8d037039d6cbf04615444f
     restart: unless-stopped
     healthcheck:
       test:
